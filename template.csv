@@ -1,0 +1,4 @@
+id,title,category,client_priority,ticket_type,severity,occurrence,chargeable,duration,teams_involved,assignee_ids,dependencies,market,ticket_owner,due_date_urgency,ticket_status,progress,bypass,bypass_reason
+T001,Example: Login crash on mobile,client_ticket,high,bug,critical,frequent,chargeable,1-3days,,87653460|87653461,none,uk,,,,not_started,,
+T002,Example: New reporting dashboard,internal_ticket,,,,,strategic,>3days,,87828350,none,uk,tech,,,,
+T003,Example: Fix tooltip alignment,client_ask,low,bug,minor,once,free,<1day,1,,none,europe,,moderate,ready,not_started,,

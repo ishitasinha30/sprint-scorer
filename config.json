@@ -1,0 +1,78 @@
+{
+  "bandwidth": {
+    "backend":  170,
+    "frontend": 185,
+    "ai":       115,
+    "qa":       175
+  },
+
+  "team_map": {
+    "87653460":  "backend",
+    "87653461":  "frontend",
+    "87798688":  "backend",
+    "87873215":  "backend",
+    "87653454":  "backend",
+    "87828350":  "frontend",
+    "87653468":  "backend",
+    "278677123": "frontend",
+    "164600863": "frontend",
+    "212418350": "frontend",
+    "87760075":  "qa",
+    "93819659":  "backend"
+  },
+
+  "weights": {
+    "client_ticket": {
+      "client_priority": 0.20,
+      "ticket_type":     0.05,
+      "severity":        0.15,
+      "occurrence":      0.15,
+      "chargeable":      0.05,
+      "effort":          0.35,
+      "market":          0.05
+    },
+    "internal_ticket": {
+      "ticket_owner":    0.20,
+      "ticket_type":     0.05,
+      "severity":        0.15,
+      "occurrence":      0.15,
+      "effort":          0.35,
+      "chargeable":      0.05,
+      "market":          0.05
+    },
+    "client_ask": {
+      "due_date_urgency": 0.30,
+      "client_priority":  0.20,
+      "ticket_status":    0.35,
+      "effort":           0.15
+    }
+  },
+
+  "effort_weights": {
+    "duration":     0.40,
+    "teams":        0.30,
+    "dependencies": 0.30
+  },
+
+  "allocation": {
+    "client_ticket":   0.50,
+    "internal_ticket": 0.30,
+    "client_ask":      0.10,
+    "buffer":          0.10
+  },
+
+  "scores": {
+    "client_priority":  { "high": 5, "medium": 3, "low": 1 },
+    "ticket_type":      { "regression": 5, "bug": 4, "enhancement": 3, "feature": 1 },
+    "severity":         { "critical": 5, "major": 4, "minor": 3, "low": 1 },
+    "occurrence":       { "frequent": 5, "multiple": 3, "once": 1 },
+    "chargeable":       { "chargeable": 5, "strategic": 3, "free": 1 },
+    "market":           { "usa": 5, "uk": 3, "europe": 1 },
+    "ticket_owner":     { "bd": 5, "tech": 4, "qa": 4, "marketing": 3, "design": 1 },
+    "due_date_urgency": { "critical": 5, "moderate": 3, "low": 1 },
+    "ticket_status":    { "ready": 5, "customer_review": 2, "to_do_design": 1 },
+    "duration":         { "<1day": 5, "1-3days": 3, ">3days": 1 },
+    "teams_involved":   { "1": 5, "2": 3, "3+": 1 },
+    "dependencies":     { "none": 5, "relates": 3, "blocks": 1 }
+  }
+}
