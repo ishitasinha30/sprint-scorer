@@ -21,6 +21,7 @@ ClickUp users: pass --assignees to resolve teams from raw assignee IDs.
 """
 
 import csv
+import io
 import json
 import argparse
 import sys
@@ -249,20 +250,36 @@ def resolve_teams(assignee_ids: str, team_map: dict) -> str:
 
 # ── CSV loader ────────────────────────────────────────────────────────────────
 
+def _decode_csv_bytes(raw: bytes) -> str:
+    """Decode CSV bytes; Excel / regional exports are often not UTF-8."""
+    if raw.startswith(b"\xef\xbb\xbf"):
+        return raw.decode("utf-8-sig")
+    if raw.startswith(b"\xff\xfe"):
+        return raw.decode("utf-16-le")
+    if raw.startswith(b"\xfe\xff"):
+        return raw.decode("utf-16-be")
+    for enc in ("utf-8", "cp1252"):
+        try:
+            return raw.decode(enc)
+        except UnicodeDecodeError:
+            continue
+    return raw.decode("latin-1")
+
+
 def load(path: str, team_map: dict) -> list:
     tickets = []
-    with open(path, newline="", encoding="utf-8-sig") as f:
-        for row in csv.DictReader(f):
-            row = {k.strip(): (v or "").strip() for k, v in row.items() if k}
-            tid = row.get("id") or f"T{len(tickets)+1:03d}"
-            cat = row.get("category","").lower()
+    text = _decode_csv_bytes(Path(path).read_bytes())
+    f = io.StringIO(text, newline="")
+    for row in csv.DictReader(f):
+        row = {k.strip(): (v or "").strip() for k, v in row.items() if k}
+        tid = row.get("id") or f"T{len(tickets)+1:03d}"
+        cat = row.get("category", "").lower()
 
-            # resolve teams from assignee IDs if teams_involved blank
-            if not row.get("teams_involved") and row.get("assignee_ids"):
-                row["teams_involved"] = resolve_teams(row["assignee_ids"], team_map)
+        if not row.get("teams_involved") and row.get("assignee_ids"):
+            row["teams_involved"] = resolve_teams(row["assignee_ids"], team_map)
 
-            tickets.append(Ticket(id=tid, title=row.get("title","(no title)"),
-                                  category=cat, raw=row))
+        tickets.append(Ticket(id=tid, title=row.get("title", "(no title)"),
+                              category=cat, raw=row))
     return tickets
 
 
